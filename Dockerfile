@@ -7,6 +7,7 @@ RUN apt-get -y install nginx
 RUN apt-get -y install mariadb-server mariadb-client
 RUN apt-get -y install php7.3 php7.3-fpm php7.3-mbstring php7.3-mysql
 RUN apt-get -y install wget
+RUN apt-get -y install openssl
 
 RUN mkdir /srcs
 COPY srcs /srcs/
@@ -49,6 +50,8 @@ RUN service mysql start \
 && echo "GRANT ALL ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';" | mysql -u root \
 && echo "FLUSH PRIVILEGES;" | mysql -u root \
 && mv /srcs/wordpress/wp-config.php /var/www/localhost/wordpress/wp-config.php
+
+# Config SSL
 
 CMD bash /srcs/run.sh
 
