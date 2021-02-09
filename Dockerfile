@@ -12,6 +12,12 @@ RUN apt-get -y install openssl
 RUN mkdir /srcs
 COPY srcs /srcs/
 
+RUN cd /srcs/phpmyadmin \
+&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz
+
+RUN cd /srcs/wordpress \
+&& wget https://wordpress.org/latest.tar.gz
+
 # Config Nginx
 RUN mkdir -p /var/www/localhost \
 && chown -R $USER:$USER /var/www/* \
@@ -27,7 +33,6 @@ RUN service mysql start \
 
 # Install phpMyAdmin
 RUN cd /srcs/phpmyadmin \
-&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz \
 && tar -xf phpMyAdmin-5.0.4-all-languages.tar.gz \
 && rm -r phpMyAdmin-5.0.4-all-languages.tar.gz \
 && mv /srcs/phpmyadmin/phpMyAdmin-5.0.4-all-languages /var/www/localhost/phpmyadmin
@@ -40,20 +45,24 @@ RUN service mysql start \
 
 # Install WordPress
 RUN cd /srcs/wordpress \
-&& wget https://wordpress.org/latest.tar.gz \
 && tar -xf latest.tar.gz \
-&& mv /srcs/wordpress/wordpress /var/www/localhost/
+&& mv /srcs/wordpress/wordpress /var/www/localhost/ \
+&& chown -R www-data:www-data /var/www/localhost/wordpress
 
 # Config Wordpress
 RUN service mysql start \
 && echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root \
-&& echo "GRANT ALL ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';" | mysql -u root \
+&& echo "GRANT ALL ON wordpress.* TO 'user'@'localhost' IDENTIFIED BY 'password';" | mysql -u root \
 && echo "FLUSH PRIVILEGES;" | mysql -u root \
 && mv /srcs/wordpress/wp-config.php /var/www/localhost/wordpress/wp-config.php
 
 # Config SSL
-
-CMD bash /srcs/run.sh
+RUN mkdir /etc/nginx/ssl \
+&& touch /etc/nginx/ssl/localhost.key \
+&& touch /etc/nginx/ssl/localhost.pem \
+&& openssl req -x509 -nodes -days 365 -newkey rsa:4096 -sha256 -keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.pem -subj "/C=FR/ST=Lyon/L=Lyon/O=42/OU=chervy/CN=localhost"
 
 EXPOSE 80
 EXPOSE 443
+
+CMD bash /srcs/run.sh
