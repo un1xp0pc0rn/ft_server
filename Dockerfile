@@ -57,9 +57,9 @@ RUN service mysql start \
 
 # Config SSL
 RUN mkdir /etc/nginx/ssl \
-&& touch /etc/nginx/ssl/localhost.key \
-&& touch /etc/nginx/ssl/localhost.pem \
-&& openssl req -x509 -nodes -days 365 -newkey rsa:4096 -sha256 -keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.pem -subj "/C=FR/ST=Lyon/L=Lyon/O=42/OU=chervy/CN=localhost"
+&& touch /etc/nginx/ssl/nginx-selfsigned.key \
+&& touch /etc/nginx/ssl/nginx-selfsigned.crt \
+&& openssl req -x509 -nodes -days 365 -newkey rsa:4096 -sha256 -keyout /etc/nginx/ssl/nginx-selfsigned.key -out /etc/nginx/ssl/nginx-selfsigned.crt -subj "/C=FR/ST=Lyon/L=Lyon/O=42/OU=chervy/CN=localhost"
 
 EXPOSE 80
 EXPOSE 443
