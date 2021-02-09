@@ -4,13 +4,19 @@
 
 ### Build
 
-* 'docker build -t debian .'
+* 'docker build -t ft_server .'
 
 ### Run
 
-* 'docker run -d -p 80:80 -p 443:443 --name=debian 3d4bc80bd107'
+* 'docker run --rm -d -p 80:80 -p 443:443  --env index=on --name=tmp ft_server'
 
-* 'docker run -p 80:80 -p 443:443 -it --name=debian 76f883f4eb3f /bin/bash'
+* 'docker run --rm -d -p 80:80 -p 443:443  --env index=off --name=tmp ft_server'
+
+* 'docker run -p 80:80 -p 443:443 -it --name=tmp ft_server /bin/bash'
+
+### Stop
+
+* 'docker stop tmp'
 
 ### Delete
 
