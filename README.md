@@ -20,6 +20,6 @@
 
 ### Delete
 
-* Supprimer une image : 'docker rmi 76f883f4eb3f'
+* 'docker rmi 76f883f4eb3f'
 
-* Supprimer toutes les images : 'docker rmi $(docker images -a -q)'
+* 'docker rmi $(docker images -a -q)'
