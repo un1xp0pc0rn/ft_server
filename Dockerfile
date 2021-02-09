@@ -3,19 +3,19 @@ LABEL maintainer="chervy@student.42lyon.fr"
 
 RUN apt-get update && apt-get -y upgrade
 
-RUN apt-get -y install nginx
-RUN apt-get -y install mariadb-server mariadb-client
-RUN apt-get -y install php7.3 php7.3-fpm php7.3-mbstring php7.3-mysql
-RUN apt-get -y install wget
-RUN apt-get -y install openssl
+RUN apt-get -y install nginx \
+&& apt-get -y install mariadb-server mariadb-client \
+&& apt-get -y install php7.3 php7.3-fpm php7.3-mbstring php7.3-mysql \
+&& apt-get -y install php7.3-cli php7.3-json php7.3-pdo php7.3-zip php7.3-gd php7.3-curl php7.3-xml php7.3-bcmath php7.3-json \
+&& apt-get -y install wget \
+&& apt-get -y install openssl
 
 RUN mkdir /srcs
 COPY srcs /srcs/
 
 RUN cd /srcs/phpmyadmin \
-&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz
-
-RUN cd /srcs/wordpress \
+&& wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz \
+&& cd /srcs/wordpress \
 && wget https://wordpress.org/latest.tar.gz
 
 # Config Nginx
